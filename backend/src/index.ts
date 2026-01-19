@@ -18,6 +18,12 @@ validateEnv();
 // Create Express app
 const app = express();
 
+// Trust proxy for reverse proxy environments (Render, Heroku, etc.)
+// This is required for rate limiting to work correctly
+if (config.env === 'production') {
+    app.set('trust proxy', 1);
+}
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
@@ -61,12 +67,19 @@ const swaggerOptions = {
                 name: 'API Support',
             },
         },
-        servers: [
-            {
-                url: `http://localhost:${config.port}`,
-                description: 'Development server',
-            },
-        ],
+        servers: config.env === 'production'
+            ? [
+                {
+                    url: process.env.RENDER_EXTERNAL_URL || `https://${process.env.RENDER_SERVICE_NAME}.onrender.com`,
+                    description: 'Production server',
+                },
+            ]
+            : [
+                {
+                    url: `http://localhost:${config.port}`,
+                    description: 'Development server',
+                },
+            ],
         components: {
             securitySchemes: {
                 bearerAuth: {
