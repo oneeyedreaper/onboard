@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* ============================================
+   FLEXIBLE THEME SYSTEM
+   
+   To change the theme, simply modify the HSL values below.
+   The entire app will adapt automatically.
+   ============================================ */
+
+:root {
+	/* Primary Color - Change these to rebrand */
+	--primary-hue: 220;
+	--primary-saturation: 90%;
+
+	/* Generated Primary Palette */
+	--color-primary-50: hsl(var(--primary-hue), var(--primary-saturation), 97%);
+	--color-primary-100: hsl(var(--primary-hue), var(--primary-saturation), 93%);
+	--color-primary-200: hsl(var(--primary-hue), var(--primary-saturation), 85%);
+	--color-primary-300: hsl(var(--primary-hue), var(--primary-saturation), 73%);
+	--color-primary-400: hsl(var(--primary-hue), var(--primary-saturation), 60%);
+	--color-primary-500: hsl(var(--primary-hue), var(--primary-saturation), 50%);
+	--color-primary-600: hsl(var(--primary-hue), var(--primary-saturation), 42%);
+	--color-primary-700: hsl(var(--primary-hue), var(--primary-saturation), 35%);
+	--color-primary-800: hsl(var(--primary-hue), var(--primary-saturation), 28%);
+	--color-primary-900: hsl(var(--primary-hue), var(--primary-saturation), 22%);
+
+	/* Semantic Colors */
+	--color-success: hsl(142, 76%, 45%);
+	--color-success-light: hsl(142, 76%, 90%);
+	--color-warning: hsl(38, 92%, 50%);
+	--color-warning-light: hsl(38, 92%, 90%);
+	--color-error: hsl(0, 84%, 60%);
+	--color-error-light: hsl(0, 84%, 93%);
+
+	/* Light Theme Surfaces */
+	--color-background: hsl(220, 20%, 98%);
+	--color-surface: hsl(0, 0%, 100%);
+	--color-surface-hover: hsl(220, 15%, 96%);
+	--color-border: hsl(220, 15%, 90%);
+	--color-border-light: hsl(220, 15%, 94%);
+
+	/* Text Colors */
+	--color-text: hsl(220, 20%, 15%);
+	--color-text-secondary: hsl(220, 10%, 45%);
+	--color-text-muted: hsl(220, 10%, 60%);
+	--color-text-inverse: hsl(0, 0%, 100%);
+
+	/* Shadows */
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+		0 4px 6px -4px rgb(0 0 0 / 0.1);
+	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+		0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+	/* Radius */
+	--radius-sm: 0.375rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-full: 9999px;
+
+	/* Transitions */
+	--transition-fast: 150ms ease;
+	--transition-base: 200ms ease;
+	--transition-slow: 300ms ease;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+	--color-background: hsl(220, 20%, 8%);
+	--color-surface: hsl(220, 20%, 12%);
+	--color-surface-hover: hsl(220, 18%, 16%);
+	--color-border: hsl(220, 15%, 22%);
+	--color-border-light: hsl(220, 15%, 18%);
+
+	--color-text: hsl(220, 15%, 95%);
+	--color-text-secondary: hsl(220, 10%, 65%);
+	--color-text-muted: hsl(220, 10%, 50%);
+
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+}
+
+/* Base Styles */
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-background);
+	color: var(--color-text);
+	font-family: "Inter", system-ui, -apple-system, sans-serif;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus Styles */
+:focus-visible {
+	outline: 2px solid var(--color-primary-500);
+	outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+	background-color: var(--color-primary-200);
+	color: var(--color-primary-900);
+}
+
+[data-theme="dark"] ::selection {
+	background-color: var(--color-primary-700);
+	color: var(--color-primary-100);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-text-muted);
+}

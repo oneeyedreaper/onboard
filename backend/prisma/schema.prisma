@@ -1,0 +1,214 @@
+// Prisma Schema for Client Onboarding API
+// Database: PostgreSQL (Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum OnboardingStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+enum DocumentCategory {
+  ID_DOCUMENT
+  BUSINESS_LICENSE
+  TAX_DOCUMENT
+  PROOF_OF_ADDRESS
+  OTHER
+}
+
+/// User roles for authorization
+enum Role {
+  USER
+  ADMIN
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+/// Client account for the onboarding system
+model Client {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  companyName   String?
+  phone         String?
+  avatarUrl     String?
+  emailVerified Boolean  @default(false)
+  role          Role     @default(USER)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  onboardingProgress      OnboardingProgress?
+  documents               Document[]
+  refreshTokens           RefreshToken[]
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  adminActivityLogs       AdminActivityLog[]
+
+  @@index([email])
+  @@map("clients")
+}
+
+/// Password reset tokens for forgot password flow
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@index([token])
+  @@index([clientId])
+  @@map("password_reset_tokens")
+}
+
+/// Email verification tokens
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@index([token])
+  @@index([clientId])
+  @@map("email_verification_tokens")
+}
+
+/// Refresh tokens for JWT authentication
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@index([clientId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+/// Defines the steps in the onboarding process
+model OnboardingStep {
+  id          String  @id @default(uuid())
+  stepNumber  Int     @unique
+  name        String  @unique // e.g., "personal_info", "documents", "verification", "setup"
+  title       String  // Display title
+  description String
+  isRequired  Boolean @default(true)
+
+  // Relations
+  stepProgress StepProgress[]
+
+  @@map("onboarding_steps")
+}
+
+/// Tracks overall onboarding progress for a client
+model OnboardingProgress {
+  id          String           @id @default(uuid())
+  clientId    String           @unique
+  client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  currentStep Int              @default(1)
+  status      OnboardingStatus @default(PENDING)
+  completedAt DateTime?
+  
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  stepProgress StepProgress[]
+
+  @@map("onboarding_progress")
+}
+
+/// Tracks progress for each individual step
+model StepProgress {
+  id                   String             @id @default(uuid())
+  onboardingProgressId String
+  onboardingProgress   OnboardingProgress @relation(fields: [onboardingProgressId], references: [id], onDelete: Cascade)
+  onboardingStepId     String
+  onboardingStep       OnboardingStep     @relation(fields: [onboardingStepId], references: [id], onDelete: Cascade)
+  
+  status               StepStatus         @default(PENDING)
+  data                 Json?              // Step-specific form data
+  completedAt          DateTime?
+
+  @@unique([onboardingProgressId, onboardingStepId])
+  @@map("step_progress")
+}
+
+/// Documents uploaded during onboarding
+model Document {
+  id         String           @id @default(uuid())
+  clientId   String
+  client     Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  fileName   String
+  fileUrl    String
+  fileKey    String           // UploadThing file key for deletion
+  fileType   String
+  fileSize   Int
+  category   DocumentCategory
+  
+  // Verification
+  verificationStatus DocumentVerificationStatus @default(PENDING)
+  rejectionReason    String?
+  verifiedAt         DateTime?
+  
+  uploadedAt DateTime         @default(now())
+
+  @@index([clientId])
+  @@map("documents")
+}
+
+/// Document verification status
+enum DocumentVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// Admin activity log for audit trail
+model AdminActivityLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  action      String   // APPROVE_DOCUMENT, REJECT_DOCUMENT, BULK_APPROVE, etc.
+  targetType  String   // DOCUMENT, CLIENT
+  targetId    String
+  details     String?  // JSON string with additional details
+  createdAt   DateTime @default(now())
+
+  admin       Client   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([createdAt])
+  @@map("admin_activity_logs")
+}
+
