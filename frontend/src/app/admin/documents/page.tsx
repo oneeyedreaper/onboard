@@ -36,6 +36,7 @@ import { adminApi, AdminDocument, Document } from "@/lib/api";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import DocumentPreviewModal from "@/components/ui/DocumentPreviewModal";
+import { Avatar } from "@/components/ui/Avatar";
 
 const STATUS_COLORS: Record<
 	Document["verificationStatus"],
@@ -72,6 +73,7 @@ interface GroupedDocuments {
 		email: string;
 		firstName: string;
 		lastName: string;
+		avatarUrl?: string | null;
 	};
 	documents: AdminDocument[];
 	pendingCount: number;
@@ -329,10 +331,12 @@ export default function AdminDocuments() {
 
 					<div className="p-4 border-t border-[var(--color-border)]">
 						<div className="flex items-center gap-3 mb-4">
-							<div className="w-10 h-10 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-medium">
-								{user?.firstName?.[0]}
-								{user?.lastName?.[0]}
-							</div>
+							<Avatar
+								src={user?.avatarUrl}
+								firstName={user?.firstName}
+								lastName={user?.lastName}
+								className="w-10 h-10 bg-red-200 text-red-700 font-medium"
+							/>
 							<div className="flex-1 min-w-0">
 								<p className="font-medium text-[var(--color-text)] truncate">
 									{user?.firstName} {user?.lastName}
@@ -474,10 +478,12 @@ export default function AdminDocuments() {
 													className="flex items-center gap-4 flex-1"
 													onClick={() => toggleClientExpanded(group.client.id)}
 												>
-													<div className="w-12 h-12 rounded-full bg-[var(--color-primary-200)] flex items-center justify-center text-[var(--color-primary-700)] font-medium">
-														{group.client.firstName?.[0]}
-														{group.client.lastName?.[0]}
-													</div>
+													<Avatar
+														src={group.client.avatarUrl}
+														firstName={group.client.firstName}
+														lastName={group.client.lastName}
+														className="w-12 h-12 bg-[var(--color-primary-200)] text-[var(--color-primary-700)] font-medium"
+													/>
 													<div className="text-left">
 														<p className="font-medium text-[var(--color-text)]">
 															{group.client.firstName} {group.client.lastName}

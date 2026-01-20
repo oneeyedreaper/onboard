@@ -129,6 +129,7 @@ export const getDocuments = async (
                             email: true,
                             firstName: true,
                             lastName: true,
+                            avatarUrl: true,
                         },
                     },
                 },
@@ -176,7 +177,7 @@ export const updateDocumentStatus = async (
         // Check document exists
         const document = await prisma.document.findUnique({
             where: { id },
-            include: { client: { select: { email: true, firstName: true, lastName: true } } },
+            include: { client: { select: { email: true, firstName: true, lastName: true, avatarUrl: true } } },
         });
         if (!document) {
             throw errors.notFound('Document');
@@ -440,6 +441,7 @@ export const getClients = async (
                     firstName: true,
                     lastName: true,
                     companyName: true,
+                    avatarUrl: true,
                     emailVerified: true,
                     createdAt: true,
                     onboardingProgress: {

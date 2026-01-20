@@ -537,6 +537,7 @@ export interface AdminDocument extends Document {
         email: string;
         firstName: string;
         lastName: string;
+        avatarUrl?: string | null;
     };
 }
 
@@ -545,6 +546,7 @@ export interface AdminClient {
     email: string;
     firstName: string;
     lastName: string;
+    avatarUrl?: string | null;
     companyName?: string | null;
     emailVerified: boolean;
     createdAt: string;

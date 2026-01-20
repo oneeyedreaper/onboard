@@ -26,6 +26,7 @@ import {
 	OnboardingStatus,
 	Document,
 } from "@/lib/api";
+import { Avatar } from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
 import Card, { CardTitle, CardDescription } from "@/components/ui/Card";
 
@@ -157,10 +158,12 @@ export default function DashboardPage() {
 					{/* User & Logout */}
 					<div className="p-4 border-t border-[var(--color-border)]">
 						<div className="flex items-center gap-3 mb-4">
-							<div className="w-10 h-10 rounded-full bg-[var(--color-primary-200)] flex items-center justify-center text-[var(--color-primary-700)] font-medium">
-								{user?.firstName?.[0]}
-								{user?.lastName?.[0]}
-							</div>
+							<Avatar
+								src={user?.avatarUrl}
+								firstName={user?.firstName}
+								lastName={user?.lastName}
+								className="w-10 h-10 bg-[var(--color-primary-200)] text-[var(--color-primary-700)] font-medium"
+							/>
 							<div className="flex-1 min-w-0">
 								<p className="font-medium text-[var(--color-text)] truncate">
 									{user?.firstName} {user?.lastName}

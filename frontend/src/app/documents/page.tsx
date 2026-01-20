@@ -36,6 +36,7 @@ import { useDropzone } from "react-dropzone";
 import { useUploadThing } from "@/lib/uploadthing";
 import Button from "@/components/ui/Button";
 import Card, { CardTitle, CardDescription } from "@/components/ui/Card";
+import { Avatar } from "@/components/ui/Avatar";
 
 const CATEGORY_LABELS: Record<Document["category"], string> = {
 	ID_DOCUMENT: "ID Document",
@@ -304,10 +305,12 @@ export default function DocumentsPage() {
 
 					<div className="p-4 border-t border-[var(--color-border)]">
 						<div className="flex items-center gap-3 mb-4">
-							<div className="w-10 h-10 rounded-full bg-[var(--color-primary-200)] flex items-center justify-center text-[var(--color-primary-700)] font-medium">
-								{user?.firstName?.[0]}
-								{user?.lastName?.[0]}
-							</div>
+							<Avatar
+								src={user?.avatarUrl}
+								firstName={user?.firstName}
+								lastName={user?.lastName}
+								className="w-10 h-10 bg-[var(--color-primary-200)] text-[var(--color-primary-700)] font-medium"
+							/>
 							<div className="flex-1 min-w-0">
 								<p className="font-medium text-[var(--color-text)] truncate">
 									{user?.firstName} {user?.lastName}

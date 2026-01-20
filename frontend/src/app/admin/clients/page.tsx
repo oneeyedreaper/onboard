@@ -28,6 +28,7 @@ import { useToast } from "@/components/ui/Toast";
 import { adminApi, AdminClient } from "@/lib/api";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import { Avatar } from "@/components/ui/Avatar";
 
 export default function AdminClients() {
 	const router = useRouter();
@@ -151,10 +152,12 @@ export default function AdminClients() {
 
 					<div className="p-4 border-t border-[var(--color-border)]">
 						<div className="flex items-center gap-3 mb-4">
-							<div className="w-10 h-10 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-medium">
-								{user?.firstName?.[0]}
-								{user?.lastName?.[0]}
-							</div>
+							<Avatar
+								src={user?.avatarUrl}
+								firstName={user?.firstName}
+								lastName={user?.lastName}
+								className="w-10 h-10 bg-red-200 text-red-700 font-medium"
+							/>
 							<div className="flex-1 min-w-0">
 								<p className="font-medium text-[var(--color-text)] truncate">
 									{user?.firstName} {user?.lastName}
@@ -237,10 +240,12 @@ export default function AdminClients() {
 										<Card>
 											<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
 												<div className="flex items-center gap-4">
-													<div className="w-12 h-12 rounded-full bg-[var(--color-primary-200)] flex items-center justify-center text-[var(--color-primary-700)] font-medium text-lg">
-														{client.firstName?.[0]}
-														{client.lastName?.[0]}
-													</div>
+													<Avatar
+														src={client.avatarUrl}
+														firstName={client.firstName}
+														lastName={client.lastName}
+														className="w-12 h-12 bg-[var(--color-primary-200)] text-[var(--color-primary-700)] font-medium text-lg"
+													/>
 													<div>
 														<p className="font-medium text-[var(--color-text)]">
 															{client.firstName} {client.lastName}
