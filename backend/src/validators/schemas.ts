@@ -116,6 +116,7 @@ export const uploadDocumentSchema = z.object({
     fileType: z.string().min(1),
     fileSize: z.number().positive(),
     category: documentCategorySchema,
+    customDocType: z.string().max(100).trim().optional(),
 });
 
 // ============================================

@@ -44,7 +44,7 @@ export const addDocument = async (
 ): Promise<void> => {
     try {
         const clientId = req.client!.id;
-        const { fileName, fileUrl, fileKey, fileType, fileSize, category } = req.body;
+        const { fileName, fileUrl, fileKey, fileType, fileSize, category, customDocType } = req.body;
 
         const document = await prisma.document.create({
             data: {
@@ -55,6 +55,7 @@ export const addDocument = async (
                 fileType,
                 fileSize,
                 category,
+                customDocType: category === 'OTHER' ? customDocType : null,
             },
         });
 

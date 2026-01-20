@@ -480,6 +480,7 @@ export interface Document {
     fileType: string;
     fileSize: number;
     category: 'ID_DOCUMENT' | 'BUSINESS_LICENSE' | 'TAX_DOCUMENT' | 'PROOF_OF_ADDRESS' | 'OTHER';
+    customDocType?: string | null; // Custom document type name for OTHER category
     verificationStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
     rejectionReason?: string | null;
     verifiedAt?: string | null;
@@ -493,6 +494,7 @@ export interface UploadDocumentData {
     fileType: string;
     fileSize: number;
     category: Document['category'];
+    customDocType?: string;
 }
 
 export const documentsApi = {

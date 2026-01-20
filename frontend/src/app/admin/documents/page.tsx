@@ -59,10 +59,10 @@ const STATUS_COLORS: Record<
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-	IDENTITY: "Identity",
-	ADDRESS: "Address Proof",
-	FINANCIAL: "Financial",
-	BUSINESS: "Business",
+	ID_DOCUMENT: "ID Document",
+	BUSINESS_LICENSE: "Business License",
+	TAX_DOCUMENT: "Tax Document",
+	PROOF_OF_ADDRESS: "Proof of Address",
 	OTHER: "Other",
 };
 
@@ -555,8 +555,11 @@ export default function AdminDocuments() {
 																				</p>
 																				<div className="flex items-center gap-2 mt-1 flex-wrap">
 																					<span className="text-xs px-2 py-0.5 rounded bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
-																						{CATEGORY_LABELS[doc.category] ||
-																							doc.category}
+																						{doc.category === "OTHER" &&
+																						doc.customDocType
+																							? `Other: ${doc.customDocType}`
+																							: CATEGORY_LABELS[doc.category] ||
+																							  doc.category}
 																					</span>
 																					<span
 																						className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded ${statusStyle.bg} ${statusStyle.text}`}

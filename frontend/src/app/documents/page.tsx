@@ -181,20 +181,25 @@ export default function DocumentsPage() {
 
 				const uploaded = uploadResult[0];
 
-				// Use custom name for OTHER category, otherwise use original filename
-				const displayName =
-					uploadCategory === "OTHER" && customDocName.trim()
-						? customDocName.trim()
-						: file.name;
-
 				// Save document to database
+				console.log("Adding document payload:", {
+					fileName: file.name,
+					category: uploadCategory,
+					customDocType:
+						uploadCategory === "OTHER" ? customDocName.trim() : undefined,
+				});
 				const doc = await documentsApi.add({
-					fileName: displayName,
+					fileName: file.name,
 					fileUrl: uploaded.ufsUrl,
 					fileKey: uploaded.key,
 					fileType: file.type,
 					fileSize: file.size,
 					category: uploadCategory,
+					// Include custom document type name for OTHER category
+					customDocType:
+						uploadCategory === "OTHER" && customDocName.trim()
+							? customDocName.trim()
+							: undefined,
 				});
 
 				// Add to list and reset form
@@ -214,7 +219,7 @@ export default function DocumentsPage() {
 				setIsUploading(false);
 			}
 		},
-		[uploadCategory, startUpload, toast]
+		[uploadCategory, customDocName, startUpload, toast]
 	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({

@@ -175,7 +175,8 @@ model Document {
   fileKey    String           // UploadThing file key for deletion
   fileType   String
   fileSize   Int
-  category   DocumentCategory
+  category      DocumentCategory
+  customDocType String?          // Custom document type name for OTHER category (e.g., "Driving License")
   
   // Verification
   verificationStatus DocumentVerificationStatus @default(PENDING)
