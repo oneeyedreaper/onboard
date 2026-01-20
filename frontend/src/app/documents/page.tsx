@@ -182,12 +182,6 @@ export default function DocumentsPage() {
 				const uploaded = uploadResult[0];
 
 				// Save document to database
-				console.log("Adding document payload:", {
-					fileName: file.name,
-					category: uploadCategory,
-					customDocType:
-						uploadCategory === "OTHER" ? customDocName.trim() : undefined,
-				});
 				const doc = await documentsApi.add({
 					fileName: file.name,
 					fileUrl: uploaded.ufsUrl,
